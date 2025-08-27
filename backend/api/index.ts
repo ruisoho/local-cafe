@@ -16,6 +16,8 @@ const allowedOrigins = [
   'http://localhost:3003',
   'http://localhost:3004',
   process.env.FRONTEND_URL,
+  // Add your Vercel frontend domain here
+  'https://your-frontend-domain.vercel.app'
 ].filter(Boolean);
 
 app.use(cors({
@@ -27,7 +29,7 @@ app.use(cors({
       return callback(null, true);
     }
     
-    // Allow any vercel.app domain
+    // Allow any vercel.app domain in development
     if (origin && origin.endsWith('.vercel.app')) {
       return callback(null, true);
     }
