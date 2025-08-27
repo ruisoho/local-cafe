@@ -50,7 +50,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Seed database endpoint
-app.post('/api/seed', async (req, res) => {
+app.get('/api/seed', async (req, res) => {
   try {
     const { PrismaClient } = require('@prisma/client');
     const bcrypt = require('bcryptjs');
