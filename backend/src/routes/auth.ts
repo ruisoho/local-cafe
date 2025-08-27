@@ -85,6 +85,7 @@ router.post('/register', async (req, res) => {
 
 // POST /api/auth/login - Login user
 router.post('/login', async (req, res) => {
+  const prisma = getPrismaClient();
   try {
     const { email, password } = req.body;
 
@@ -142,11 +143,14 @@ router.post('/login', async (req, res) => {
       success: false,
       message: 'Failed to login',
     });
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
 // POST /api/auth/google - Google OAuth login/register
 router.post('/google', async (req, res) => {
+  const prisma = getPrismaClient();
   try {
     const { email, name, googleId } = req.body;
 
@@ -214,11 +218,14 @@ router.post('/google', async (req, res) => {
       success: false,
       message: 'Failed to authenticate with Google',
     });
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
 // GET /api/auth/me - Get current user (protected route)
 router.get('/me', async (req, res) => {
+  const prisma = getPrismaClient();
   try {
     const authHeader = req.headers.authorization;
     
@@ -262,6 +269,8 @@ router.get('/me', async (req, res) => {
       success: false,
       message: 'Invalid token',
     });
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
