@@ -4,10 +4,15 @@ import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 
 const router = express.Router();
-const prisma = new PrismaClient();
+
+// Initialize Prisma client inside handlers for serverless compatibility
+function getPrismaClient() {
+  return new PrismaClient();
+}
 
 // POST /api/auth/register - Register new user
 router.post('/register', async (req, res) => {
+  const prisma = getPrismaClient();
   try {
     const { email, password, firstName, lastName, phone } = req.body;
 

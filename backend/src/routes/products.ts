@@ -2,10 +2,15 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const router = express.Router();
-const prisma = new PrismaClient();
+
+// Initialize Prisma client inside handlers for serverless compatibility
+function getPrismaClient() {
+  return new PrismaClient();
+}
 
 // GET /api/products - Get all products
 router.get('/', async (req, res) => {
+  const prisma = getPrismaClient();
   try {
     const { category } = req.query;
     
@@ -31,11 +36,14 @@ router.get('/', async (req, res) => {
       success: false,
       message: 'Failed to fetch products',
     });
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
 // GET /api/products/categories - Get all product categories
 router.get('/categories', async (req, res) => {
+  const prisma = getPrismaClient();
   try {
     const categories = await prisma.product.findMany({
       where: {
@@ -59,11 +67,14 @@ router.get('/categories', async (req, res) => {
       success: false,
       message: 'Failed to fetch categories',
     });
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
 // GET /api/products/:id - Get single product
 router.get('/:id', async (req, res) => {
+  const prisma = getPrismaClient();
   try {
     const { id } = req.params;
     
@@ -91,6 +102,8 @@ router.get('/:id', async (req, res) => {
       success: false,
       message: 'Failed to fetch product',
     });
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
