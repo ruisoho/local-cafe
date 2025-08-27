@@ -55,9 +55,10 @@ app.get('/api/migrate', async (req, res) => {
     const { PrismaClient } = require('@prisma/client');
     const prisma = new PrismaClient();
     
-    // Execute raw SQL to create tables based on Prisma schema
+    // Drop and recreate User table with correct schema
+    await prisma.$executeRaw`DROP TABLE IF EXISTS "User" CASCADE;`;
     await prisma.$executeRaw`
-      CREATE TABLE IF NOT EXISTS "User" (
+      CREATE TABLE "User" (
         "id" SERIAL PRIMARY KEY,
         "email" TEXT NOT NULL UNIQUE,
         "password" TEXT NOT NULL,
