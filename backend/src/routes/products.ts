@@ -74,7 +74,35 @@ router.get('/categories', async (req, res) => {
   }
 });
 
-// Seed database route
+// GET /api/products/init - Initialize database tables
+router.get('/init', async (req, res) => {
+  const prisma = getPrismaClient();
+  try {
+    // Test database connection
+    await prisma.$connect();
+    
+    // Try to query the database to see if tables exist
+    const userCount = await prisma.user.count();
+    const productCount = await prisma.product.count();
+    
+    res.json({ 
+      success: true, 
+      message: 'Database connection successful',
+      data: { userCount, productCount }
+    });
+  } catch (error) {
+    console.error('Database init error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Database connection failed',
+      error: error.message 
+    });
+  } finally {
+    await prisma.$disconnect();
+  }
+});
+
+// GET /api/products/seed - Seed database with initial data
 router.get('/seed', async (req, res) => {
   const prisma = getPrismaClient();
   try {
