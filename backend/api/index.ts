@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import productsRouter from '../src/routes/products';
 import authRouter from '../src/routes/auth';
+import databaseRouter from '../src/routes/database';
 
 dotenv.config();
 
@@ -121,6 +122,7 @@ app.get('/api/seed', async (req, res) => {
 // Routes
 app.use('/api/products', productsRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/database', databaseRouter);
 
 // Catch all handler for non-API routes
 app.get('/', (req, res) => {
