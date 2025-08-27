@@ -95,7 +95,7 @@ router.get('/init', async (req, res) => {
     res.status(500).json({ 
       success: false, 
       message: 'Database connection failed',
-      error: error.message 
+      error: error instanceof Error ? error.message : 'Unknown error' 
     });
   } finally {
     await prisma.$disconnect();
