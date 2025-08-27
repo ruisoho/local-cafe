@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import productsRouter from './routes/products';
 import authRouter from './routes/auth';
+import databaseRouter from './routes/database';
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/products', productsRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/database', databaseRouter);
 
 // For local development
 if (process.env.NODE_ENV !== 'production') {
