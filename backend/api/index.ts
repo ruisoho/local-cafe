@@ -44,11 +44,12 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Local Café API is running' });
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Routes
 app.use('/api/products', productsRouter);
 app.use('/api/auth', authRouter);
 
