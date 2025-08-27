@@ -118,7 +118,7 @@ app.get('/api/seed', async (req, res) => {
   }
 });
 
-// Database initialization endpoint
+// Database initialization and seeding endpoint
 app.get('/api/database/init', async (req, res) => {
   try {
     const { PrismaClient } = require('@prisma/client');
@@ -143,6 +143,82 @@ app.get('/api/database/init', async (req, res) => {
     res.status(500).json({ 
       success: false, 
       message: 'Database connection failed',
+      error: error.message 
+    });
+  }
+});
+
+// Database seeding endpoint
+app.post('/api/database/seed', async (req, res) => {
+  try {
+    const { PrismaClient } = require('@prisma/client');
+    const prisma = new PrismaClient();
+    
+    await prisma.$connect();
+    
+    // Check if products already exist
+    const existingProducts = await prisma.product.count();
+    if (existingProducts > 0) {
+      await prisma.$disconnect();
+      return res.json({ 
+        success: true, 
+        message: 'Database already seeded',
+        data: { productCount: existingProducts }
+      });
+    }
+    
+    // Seed products
+    const products = [
+      {
+        name: 'Espresso',
+        description: 'Rich and bold espresso shot',
+        category: 'Coffee',
+        price: 2.50,
+        imageUrl: '/images/espresso.jpg',
+        available: true
+      },
+      {
+        name: 'Cappuccino',
+        description: 'Espresso with steamed milk and foam',
+        category: 'Coffee',
+        price: 4.00,
+        imageUrl: '/images/cappuccino.jpg',
+        available: true
+      },
+      {
+        name: 'Latte',
+        description: 'Espresso with steamed milk',
+        category: 'Coffee',
+        price: 4.50,
+        imageUrl: '/images/latte.jpg',
+        available: true
+      },
+      {
+        name: 'Croissant',
+        description: 'Buttery, flaky pastry',
+        category: 'Pastry',
+        price: 3.00,
+        imageUrl: '/images/croissant.jpg',
+        available: true
+      }
+    ];
+    
+    await prisma.product.createMany({ data: products });
+    
+    const productCount = await prisma.product.count();
+    
+    await prisma.$disconnect();
+    
+    res.json({ 
+      success: true, 
+      message: 'Database seeded successfully',
+      data: { productCount }
+    });
+  } catch (error) {
+    console.error('Database seed error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Database seeding failed',
       error: error.message 
     });
   }
