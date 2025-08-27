@@ -61,7 +61,9 @@ app.get('/api/migrate', async (req, res) => {
         "id" SERIAL PRIMARY KEY,
         "email" TEXT NOT NULL UNIQUE,
         "password" TEXT NOT NULL,
-        "name" TEXT,
+        "firstName" TEXT,
+        "lastName" TEXT,
+        "phone" TEXT,
         "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
       );
@@ -140,7 +142,9 @@ app.get('/api/seed', async (req, res) => {
         data: {
           email: demoUserEmail,
           password: hashedPassword,
-          name: 'Demo User',
+          firstName: 'Demo',
+          lastName: 'User',
+          phone: '+1-555-DEMO',
         },
       });
     }
