@@ -9,8 +9,33 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3002;
 
+// CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001', 
+  'http://localhost:3003',
+  'http://localhost:3004',
+  process.env.FRONTEND_URL,
+  // Add your Vercel frontend domain here
+  'https://your-frontend-domain.vercel.app'
+].filter(Boolean);
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3003', 'http://localhost:3004'],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // Allow any vercel.app domain in development
+    if (origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
+    
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -27,9 +52,15 @@ app.get('/api/health', (req, res) => {
 app.use('/api/products', productsRouter);
 app.use('/api/auth', authRouter);
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📍 Health check: http://localhost:${PORT}/api/health`);
-  console.log(`📜 Products API: http://localhost:${PORT}/api/products`);
-  console.log(`🔐 Auth API: http://localhost:${PORT}/api/auth`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📍 Health check: http://localhost:${PORT}/api/health`);
+    console.log(`📜 Products API: http://localhost:${PORT}/api/products`);
+    console.log(`🔐 Auth API: http://localhost:${PORT}/api/auth`);
+  });
+}
+
+// Export for Vercel serverless
+export default app;
