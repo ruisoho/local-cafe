@@ -49,6 +49,32 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Local Café API is running' });
 });
 
+// Migration endpoint
+app.get('/api/migrate', async (req, res) => {
+  try {
+    const { execSync } = require('child_process');
+    
+    // Run Prisma migrations
+    const output = execSync('npx prisma migrate deploy', { 
+      encoding: 'utf8',
+      cwd: process.cwd()
+    });
+    
+    res.json({ 
+      success: true, 
+      message: 'Database migrations completed successfully',
+      output: output
+    });
+  } catch (error) {
+    console.error('Migration error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Migration failed', 
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 // Seed database endpoint
 app.get('/api/seed', async (req, res) => {
   try {
