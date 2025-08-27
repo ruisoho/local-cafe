@@ -49,21 +49,67 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Local Café API is running' });
 });
 
-// Migration endpoint
+// Migration endpoint - Create tables using Prisma schema
 app.get('/api/migrate', async (req, res) => {
   try {
-    const { execSync } = require('child_process');
+    const { PrismaClient } = require('@prisma/client');
+    const prisma = new PrismaClient();
     
-    // Run Prisma migrations
-    const output = execSync('npx prisma migrate deploy', { 
-      encoding: 'utf8',
-      cwd: process.cwd()
-    });
+    // Execute raw SQL to create tables based on Prisma schema
+    await prisma.$executeRaw`
+      CREATE TABLE IF NOT EXISTS "User" (
+        "id" SERIAL PRIMARY KEY,
+        "email" TEXT NOT NULL UNIQUE,
+        "password" TEXT NOT NULL,
+        "name" TEXT,
+        "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+    
+    await prisma.$executeRaw`
+      CREATE TABLE IF NOT EXISTS "Product" (
+        "id" SERIAL PRIMARY KEY,
+        "name" TEXT NOT NULL,
+        "description" TEXT,
+        "price" DECIMAL(10,2) NOT NULL,
+        "category" TEXT NOT NULL,
+        "imageUrl" TEXT,
+        "available" BOOLEAN NOT NULL DEFAULT true,
+        "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+    
+    await prisma.$executeRaw`
+      CREATE TABLE IF NOT EXISTS "Order" (
+        "id" SERIAL PRIMARY KEY,
+        "userId" INTEGER NOT NULL,
+        "total" DECIMAL(10,2) NOT NULL,
+        "status" TEXT NOT NULL DEFAULT 'pending',
+        "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE
+      );
+    `;
+    
+    await prisma.$executeRaw`
+      CREATE TABLE IF NOT EXISTS "OrderItem" (
+        "id" SERIAL PRIMARY KEY,
+        "orderId" INTEGER NOT NULL,
+        "productId" INTEGER NOT NULL,
+        "quantity" INTEGER NOT NULL,
+        "price" DECIMAL(10,2) NOT NULL,
+        FOREIGN KEY ("orderId") REFERENCES "Order"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+        FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE
+      );
+    `;
+    
+    await prisma.$disconnect();
     
     res.json({ 
       success: true, 
-      message: 'Database migrations completed successfully',
-      output: output
+      message: 'Database tables created successfully'
     });
   } catch (error) {
     console.error('Migration error:', error);
