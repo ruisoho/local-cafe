@@ -140,9 +140,7 @@ app.get('/api/seed', async (req, res) => {
         data: {
           email: demoUserEmail,
           password: hashedPassword,
-          firstName: 'Demo',
-          lastName: 'User',
-          phone: '+1-555-DEMO',
+          name: 'Demo User',
         },
       });
     }
