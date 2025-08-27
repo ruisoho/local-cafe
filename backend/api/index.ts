@@ -4,7 +4,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import productsRouter from '../src/routes/products';
 import authRouter from '../src/routes/auth';
-import databaseRouter from '../src/routes/database';
 
 dotenv.config();
 
@@ -119,10 +118,39 @@ app.get('/api/seed', async (req, res) => {
   }
 });
 
+// Database initialization endpoint
+app.get('/api/database/init', async (req, res) => {
+  try {
+    const { PrismaClient } = require('@prisma/client');
+    const prisma = new PrismaClient();
+    
+    // Test database connection
+    await prisma.$connect();
+    
+    // Try to query the database to see if tables exist
+    const userCount = await prisma.user.count();
+    const productCount = await prisma.product.count();
+    
+    await prisma.$disconnect();
+    
+    res.json({ 
+      success: true, 
+      message: 'Database connection successful',
+      data: { userCount, productCount }
+    });
+  } catch (error) {
+    console.error('Database init error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Database connection failed',
+      error: error.message 
+    });
+  }
+});
+
 // Routes
 app.use('/api/products', productsRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/database', databaseRouter);
 
 // Catch all handler for non-API routes
 app.get('/', (req, res) => {
