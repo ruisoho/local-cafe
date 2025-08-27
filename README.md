@@ -1,214 +1,146 @@
-# ☕ Local Café Web App
+# ☕ Local Café - Modern Coffee Shop Web Application
 
-A modern, full-stack coffee shop web application built with Next.js, Express.js, and Prisma. This application provides a complete digital experience for a local café, featuring user authentication, product management, shopping cart functionality, and order processing.
+A full-stack web application for a local coffee shop built with modern technologies. Features online ordering, user authentication, menu browsing, and more.
 
-## 🌟 Features
+![Local Café](https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&h=400&fit=crop)
 
-### Frontend (Next.js)
-- **Modern UI/UX**: Beautiful, responsive design with Tailwind CSS
-- **User Authentication**: Secure login and registration system
-- **Product Catalog**: Browse coffee, pastries, and merchandise
-- **Shopping Cart**: Add, remove, and manage items
-- **Order Management**: Place and track orders
-- **User Dashboard**: View order history and account details
-- **Mobile Responsive**: Optimized for all device sizes
+## ✨ Features
 
-### Backend (Express.js + Prisma)
-- **RESTful API**: Clean, organized API endpoints
-- **Database Management**: SQLite database with Prisma ORM
-- **User Authentication**: JWT-based authentication system
-- **Product Management**: CRUD operations for products
-- **Order Processing**: Complete order lifecycle management
-- **Data Validation**: Input validation and error handling
+### 🏠 **Homepage**
+- Hero section with stunning visuals
+- Featured products showcase
+- Modern café aesthetic design
+- Responsive layout
+
+### 🍽️ **Menu & Ordering**
+- Browse products by category (Coffee, Pastries, Cakes, Sandwiches)
+- Real-time cart management
+- Product details with images and descriptions
+- Euro pricing (€)
+
+### 👤 **User Authentication**
+- User registration and login
+- JWT-based authentication
+- User profile management
+- Order history tracking
+- Demo account available
+
+### 📱 **User Profile**
+- Personal information management
+- Order history with detailed breakdowns
+- Account statistics
+- Secure logout functionality
+
+### ℹ️ **About Page**
+- Company story and values
+- Team member profiles
+- Bean-to-cup journey
+- Awards and achievements
+
+### 📍 **Contact Page**
+- Interactive Berlin map (Kastanienallee 45)
+- Contact form with validation
+- Business hours and location details
+- Transportation information
+- FAQ section
+
+### 🛒 **Shopping Cart**
+- Add/remove items
+- Quantity management
+- Real-time total calculation
+- Persistent cart state
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **Framework**: Next.js 15 (React 19)
-- **Styling**: Tailwind CSS
-- **Language**: TypeScript
-- **State Management**: React Context API
-- **HTTP Client**: Fetch API
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Utility-first CSS framework
+- **Lucide React** - Beautiful icons
+- **React Hot Toast** - Notifications
+- **React Context API** - State management
 
 ### Backend
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: SQLite
-- **ORM**: Prisma
-- **Authentication**: JWT (JSON Web Tokens)
-- **Language**: TypeScript
-
-### Development Tools
-- **Package Manager**: npm
-- **Code Quality**: ESLint
-- **Version Control**: Git
-- **Deployment**: Vercel (Frontend)
-
-## 📁 Project Structure
-
-```
-coffee-shop-web-app/
-├── frontend/                 # Next.js frontend application
-│   ├── src/
-│   │   ├── app/             # App router pages
-│   │   ├── components/      # Reusable UI components
-│   │   └── contexts/        # React context providers
-│   ├── public/              # Static assets
-│   └── package.json
-├── backend/                  # Express.js backend API
-│   ├── src/
-│   │   ├── routes/          # API route handlers
-│   │   └── index.ts         # Server entry point
-│   ├── prisma/
-│   │   ├── schema.prisma    # Database schema
-│   │   └── seed.ts          # Database seeding
-│   └── package.json
-├── .gitignore
-└── README.md
-```
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **TypeScript** - Type safety
+- **Prisma ORM** - Database toolkit
+- **SQLite** - Database
+- **JWT** - Authentication
+- **bcrypt** - Password hashing
+- **CORS** - Cross-origin requests
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- npm or yarn
+- Node.js 18+ installed
+- npm or yarn package manager
 - Git
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/coffee-shop-web-app.git
-   cd coffee-shop-web-app
+   git clone https://github.com/yourusername/local-cafe.git
+   cd local-cafe
    ```
 
-2. **Install dependencies**
+2. **Install Backend Dependencies**
    ```bash
-   # Install root dependencies
-   npm install
-   
-   # Install frontend dependencies
-   cd frontend
-   npm install
-   
-   # Install backend dependencies
-   cd ../backend
+   cd backend
    npm install
    ```
 
-3. **Set up environment variables**
+3. **Set up Database**
    ```bash
-   # In the backend directory
-   cp .env.example .env
-   ```
-   
-   Edit the `.env` file with your configuration:
-   ```env
-   DATABASE_URL="file:./dev.db"
-   JWT_SECRET="your-super-secret-jwt-key"
-   PORT=3001
-   ```
-
-4. **Set up the database**
-   ```bash
-   # In the backend directory
    npx prisma generate
    npx prisma db push
    npx prisma db seed
    ```
 
-5. **Start the development servers**
-   
-   **Backend (Terminal 1):**
+4. **Install Frontend Dependencies**
+   ```bash
+   cd ../frontend
+   npm install
+   ```
+
+5. **Start Development Servers**
+
+   Backend:
    ```bash
    cd backend
    npm run dev
    ```
-   
-   **Frontend (Terminal 2):**
+
+   Frontend:
    ```bash
    cd frontend
    npm run dev
    ```
 
-6. **Open your browser**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:3001
+6. **Access the Application**
+   - Frontend: http://localhost:3004
+   - Backend API: http://localhost:3002
 
-## 📊 Database Schema
+## 👤 Demo Account
 
-The application uses the following main entities:
+Use these credentials to test the application:
 
-- **User**: Customer accounts with authentication
-- **Product**: Coffee, pastries, and merchandise items
-- **Category**: Product categorization
-- **Order**: Customer orders
-- **OrderItem**: Individual items within orders
-
-## 🔧 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/auth/profile` - Get user profile
-
-### Products
-- `GET /api/products` - Get all products
-- `GET /api/products/:id` - Get product by ID
-- `GET /api/products/category/:category` - Get products by category
-
-### Orders
-- `POST /api/orders` - Create new order
-- `GET /api/orders` - Get user orders
-- `GET /api/orders/:id` - Get order by ID
-
-## 🎨 UI Components
-
-- **Header**: Navigation with cart and user menu
-- **ProductCard**: Display product information
-- **Cart**: Shopping cart with item management
-- **OrderSummary**: Order details and checkout
-- **UserDashboard**: Account management interface
-
-## 🚀 Deployment
-
-### Frontend (Vercel)
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Set the root directory to `frontend`
-4. Deploy automatically
-
-### Backend (Railway/Heroku)
-1. Set up your preferred hosting service
-2. Configure environment variables
-3. Deploy the backend directory
-4. Update frontend API URLs
+- **Email**: demo@localcafe.com
+- **Password**: demo123
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
 5. Open a Pull Request
 
-## 📝 License
+## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Author
-
-**Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
-
-## 🙏 Acknowledgments
-
-- Next.js team for the amazing framework
-- Prisma team for the excellent ORM
-- Tailwind CSS for the utility-first CSS framework
-- Vercel for seamless deployment
+This project is licensed under the MIT License.
 
 ---
 
-**Happy Coding! ☕**
+Made with ☕ and ❤️
