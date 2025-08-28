@@ -1,8 +1,4 @@
 {
-  "buildCommand": "cd frontend-new && npm run build",
-  "outputDirectory": "frontend-new/.next",
-  "installCommand": "cd frontend-new && npm install",
-  "devCommand": "cd frontend-new && npm run dev",
   "framework": "nextjs",
   "functions": {
     "backend-new/api/index.ts": {
