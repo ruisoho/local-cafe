@@ -1,33 +1,19 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "frontend-new/package.json",
-      "use": "@vercel/next"
-    },
-    {
-      "src": "backend-new/api/index.ts",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/backend-new/api/index.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/frontend-new/$1"
-    }
-  ],
-  "env": {
-    "DATABASE_URL": "@database_url",
-    "JWT_SECRET": "@jwt_secret",
-    "NODE_ENV": "production"
-  },
+  "buildCommand": "cd frontend-new && npm run build",
+  "outputDirectory": "frontend-new/.next",
+  "installCommand": "cd frontend-new && npm install",
+  "devCommand": "cd frontend-new && npm run dev",
+  "framework": "nextjs",
   "functions": {
     "backend-new/api/index.ts": {
+      "runtime": "nodejs18.x",
       "maxDuration": 30
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/backend-new/api/index.ts"
+    }
+  ]
 }
