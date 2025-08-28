@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "buildCommand": "cd frontend-new && npm run build",
+  "outputDirectory": "frontend-new/.next",
+  "installCommand": "cd frontend-new && npm install",
+  "framework": "nextjs",
+  "functions": {
+    "backend-new/api/index.ts": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/backend-new/api/index.ts"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "@database_url",
+    "JWT_SECRET": "@jwt_secret",
+    "NODE_ENV": "production"
+  }
+}
